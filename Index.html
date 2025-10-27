@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- For PWA -->
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#003366" />
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="styles.css" />
+        <!-- Font Awesome 6 CDN -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+        <title>First Pentecostal Church-Neptune</title>
+        <script src="app.js"></script>
+    </head>
+    <body>
+        <div class="home-header">
+            <img src="icons/icon-192.png" alt="FPC Logo" class="FPC-logo" />
+            <div class="home-title">
+                <h1>First Pentecostal Church</h1>
+                <span class="subtitle">"A Place of Abundance"</span>
+                <!-- Android Install Button -->
+                <button id="install-btn" hidden class="slim-btn">Install App</button>
+                <!-- iOS Install Banner -->
+                <div id="ios-install-banner" hidden class="install-banner">
+                    <p><strong>To unlock full features:</strong> Tap <span style="font-size:1.2em;">&#x1F5D2;</span> then “Add to Home Screen”</p>
+                </div>
+            </div>
+            <!-- Hamburger Menu -->
+            <div id="hamburger-menu">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <!-- Slide-out Menu -->
+            <div id="side-menu" class="hidden">
+                <ul id="menu-items"></ul>
+            </div>
+        </div>
+        <div id="app">
+
+            <!-- Home -->
+            <section id="home">
+              <h1><i class="fa-solid fa-house"></i> Home</h1>
+              <br/>
+              <div class="welcome-card">
+                <h2>Welcome to First Pentecostal Church</h2>
+                <p>We’re so glad you’re here! Whether you're exploring faith or looking for a church home, we invite you to experience the love, worship, and fellowship that define our community.</p>
+              </div>
+              <div class="invitation-card">
+                <h3>Join Us This Week</h3>
+                <ul>
+                  <li><strong>Sunday Worship:</strong> 11:15 AM</li>
+                  <li><strong>Bible Study:</strong> Thursdays at 7:30 PM</li>
+                  <li><strong>Prayer Meetings:</strong> Mondays at 10:00 AM
+                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wednesdays at 12:00 PM
+                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Saturdays at 12:00 PM</li>
+                </ul>
+                <p>Come as you are and experience the life changing power of Jesus Christ.</p>
+              </div>
+              <div class="mission-card">
+                <h3>Our Mission</h3>
+                <p>We exist to help you:</p>
+                <ul>
+                  <li><strong>Accept</strong> membership in God's family</li>
+                  <li><strong>Advance</strong> in developing Godly character</li>
+                  <li><strong>Assist</strong> in ministry and teamwork</li>
+                  <li><strong>Announce</strong> your mission to the world</li>
+                  <li><strong>Adore</strong> God's name in all you do</li>
+                </ul>
+              </div>
+              <div class="quick-links">
+                <h3>Explore More</h3><br/>
+                <div class="link-grid">
+                  <a href="#" onclick="document.querySelector('#watch').scrollIntoView({behavior:'smooth'})">
+                    <i class="fa-solid fa-video"></i> Watch Services
+                  </a>
+                  <a href="https://www.firstpentecostalchurch.com/about-us" target="_blank">
+                    <i class="fa-solid fa-users"></i> About Us
+                  </a>
+                  <a href="https://www.firstpentecostalchurch.com/contact-us" target="_blank">
+                    <i class="fa-solid fa-envelope"></i> Contact
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            <!-- Calendar -->
+            <section id="calendar">
+              <h1><i class="fa-solid fa-calendar-days"></i> Calendar</h1>
+                <iframe
+                    title="calendar"
+                    src="https://calendar.google.com/calendar/embed?src=firstpentecostalchurch.com_e2hia2v3bc766ff9397qu3eqa8@group.calendar.google.com&mode=AGENDA&showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&ctz=America/New_York"
+                    style="border: 0"
+                    width="100%"
+                    height="600">
+                </iframe>
+                  <a href="webcal://calendar.google.com/calendar/ical/firstpentecostalchurch.com_e2hia2v3bc766ff9397qu3eqa8%40group.calendar.google.com/public/basic.ics"><i class="fa-solid fa-calendar-plus"></i> Subscribe via iCal</a>
+            </section>
+
+            <!-- Videos -->
+            <section id="watch">
+              <h1><i class="fa-solid fa-video"></i> Watch</h1>
+              <br />
+              <div class="tab-frame">
+                <!-- Radio inputs -->
+                <input type="radio" name="tab" id="tab1" checked>
+                <input type="radio" name="tab" id="tab2">
+
+                <!-- Tab labels -->
+                <div class="tab-selectors">
+                  <label for="tab1">Previous Services</label>
+                  <label for="tab2">Livestream</label>
+                </div>
+
+                <!-- Tab content -->
+                <div class="tab-content" id="content1">
+                    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                    <div class="elfsight-app-98b1bf29-af90-4089-aabf-b3ec94e33f5c" data-elfsight-app-lazy></div>
+                    <div id="content-area">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+                <div class="tab-content" id="content2">
+                  <div class="embed-container">
+                    <iframe title="live stream" width="560" height="315" src="https://www.youtube.com/embed/live_stream?channel=UCobD9L76P50KVlZBfI8-XYA&autoplay=1" allowfullscreen></iframe>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Bible Class -->
+            <section id="bible-class">
+              <h1><i class="fa-solid fa-book-bible"></i> Bible Class</h1>
+              <br />
+              <div class="card">
+                <h2>Grow in the Word</h2>
+                <p>Join us every <strong>Thursday evening at 7:30 PM</strong> for Bible Class. These sessions are designed to deepen your understanding of Scripture, strengthen your walk with God, and connect with others in faith.</p>
+                <p>Whether you're new to the Bible or a seasoned student, our interactive classes offer something for everyone.</p>
+                <a href="https://meet.jit.si/FPCNeptuneBibleClass">Sign In Here</a>
+              </div>
+            </section>
+
+            <!-- Offering -->
+            <section id="giving">
+              <h1><i class="fa-solid fa-hand-holding-heart"></i> Giving</h1>
+              <br />
+              <div class="card">
+                <h2>Support the Ministry</h2>
+                <p>Your generosity helps us continue our mission to serve the community, spread the Gospel, and maintain our place of worship. Thank you for your faithfulness!</p>
+
+                <div class="giving-options">
+                  <a href="https://www.paypal.com/donate/?hosted_button_id=2JZ8Z5Y9ZKX3G" target="_blank" class="give-btn">
+                    <i class="fa-brands fa-paypal"></i> Donate via PayPal
+                  </a>
+                  <a href="https://cash.app/$FPCNeptune" target="_blank" class="give-btn">
+                    <i class="fa-solid fa-dollar-sign"></i> Give via Cash App
+                  </a>
+                </div>
+
+                <p class="note">Prefer to give in person? Offerings are received during each service. Thank you for your continued support!</p>
+              </div>
+            </section>
+
+            <!-- Settings -->
+            <section id="settings">
+              <h1><i class="fa-solid fa-gear"></i> Settings</h1>
+              <br />
+              <div class="card">
+                <h2>Appearance</h2>
+                <br/>
+                <!-- Font Size Slider -->
+                <label for="font-size-slider">Font Size</label>
+                <input type="range" id="font-size-slider" min="1" max="3" step="1" value="1">
+                <div class="font-labels">
+                  <span>Small</span>
+                  <span>Medium</span>
+                  <span>Large</span>
+                </div>
+
+                <!-- Dark Mode Toggle -->
+                <div class="toggle-row">
+                  <label for="dark-mode-toggle">Dark Mode</label>
+                  <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </section>
+
+        </div>
+    </body>
+</html>
