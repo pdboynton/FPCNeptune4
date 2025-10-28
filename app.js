@@ -1,3 +1,13 @@
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").then(reg => {
+      console.log("Service Worker registered:", reg.scope);
+    }).catch(err => {
+      console.error("Service Worker registration failed:", err);
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger-menu");
   const sideMenu = document.getElementById("side-menu");
@@ -66,3 +76,18 @@ li.addEventListener("click", () => {
   // Close the menu
   sideMenu.classList.remove("visible");
 });
+
+function navigateToSection(id) {
+  const sections = document.querySelectorAll("#app > section");
+  sections.forEach(s => s.style.display = "none");
+  document.getElementById(id).style.display = "block";
+  document.getElementById("app").scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function openModal(id) {
+  document.getElementById(id).style.display = "block";
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}

@@ -3,7 +3,7 @@
     <head>
         <!-- For PWA -->
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#003366" />
+        <meta name="theme-color" content="#2c3e50" />
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="styles.css" />
         <!-- Font Awesome 6 CDN -->
@@ -55,44 +55,57 @@
                 </ul>
                 <p>Come as you are and experience the life changing power of Jesus Christ.</p>
               </div>
-              <div class="mission-card">
-                <h3>Our Mission</h3>
-                <p>We exist to help you:</p>
-                <ul>
-                  <li><strong>Accept</strong> membership in God's family</li>
-                  <li><strong>Advance</strong> in developing Godly character</li>
-                  <li><strong>Assist</strong> in ministry and teamwork</li>
-                  <li><strong>Announce</strong> your mission to the world</li>
-                  <li><strong>Adore</strong> God's name in all you do</li>
-                </ul>
-              </div>
+
               <div class="quick-links">
                 <h3>Explore More</h3><br/>
-                <div class="link-grid">
-                  <a href="#" onclick="document.querySelector('#watch').scrollIntoView({behavior:'smooth'})">
-                    <i class="fa-solid fa-video"></i> Watch Services
-                  </a>
-                  <a href="https://www.firstpentecostalchurch.com/about-us" target="_blank">
-                    <i class="fa-solid fa-users"></i> About Us
-                  </a>
-                  <a href="https://www.firstpentecostalchurch.com/contact-us" target="_blank">
-                    <i class="fa-solid fa-envelope"></i> Contact
-                  </a>
-                </div>
+                  <div class="link-grid">
+                    <button onclick="navigateToSection('watch')">
+                      <i class="fa-solid fa-video"></i> Watch Services
+                    </button>
+                    <button onclick="openModal('about-modal')">
+                      <i class="fa-solid fa-users"></i> About Us
+                    </button>
+                    <button onclick="openModal('contact-modal')">
+                      <i class="fa-solid fa-envelope"></i> Contact
+                    </button>
+                  </div>
               </div>
-            </section>
+                <!-- About Us Modal -->
+                <div id="about-modal" class="modal">
+                  <div class="modal-content scrollable">
+                    <span class="close" onclick="closeModal('about-modal')">&times;</span>
+                    <h2>Our Purpose</h2>
+                    <p>The First Pentecostal Church exists to challenge people to ACCEPT membership in God's family, to encourage them to ADVANCE in developing Godly character, to ASSIST them in working as a team in ministry, to help them courageously ANNOUNCE their mission to the world, in order to ADORE God's name.</p>
+                    <h2>What We Believe</h2>
+                    <p>We believe the Bible to be the inspired, the only infallible, authoritative Word of God and inerrant in the original writings. We believe that there is one God, eternally existing in three relational roles: Father, Son, and Holy Spirit.</p>
+                    <p>We believe in the deity of our Lord Jesus Christ, in His virgin birth, in His sinless life, in His miracles, in His vicarious and atoning death through His shed blood, in His bodily resurrection, in His ascension to the right hand of the Father, and in His personal return in power and glory.</p>
+                    <p>We believe that the lost and sinful man must be saved, and that man's only hope of redemption is through the shed blood of Jesus Christ, the Son of God. We believe in and practice the holy ordinance of water baptism, which signifies the believer's death, burial, and resurrection into new life with Christ Jesus, and the regular celebration of Holy Communion as commanded by our Lord.</p>
+                    <p>We believe in the present ministry and baptism of the Holy Spirit, by whose indwelling the Christian is enabled to live a Godly life. We believe in the resurrection of both the saved and the unsaved; those that are saved into the resurrection of life and those that are unsaved into the resurrection of damnation.</p>
+                    <p>We believe in the spiritual unity of believers in our Lord Jesus Christ.</p>
+                  </div>
+                </div>
 
-            <!-- Calendar -->
-            <section id="calendar">
-              <h1><i class="fa-solid fa-calendar-days"></i> Calendar</h1>
-                <iframe
-                    title="calendar"
-                    src="https://calendar.google.com/calendar/embed?src=firstpentecostalchurch.com_e2hia2v3bc766ff9397qu3eqa8@group.calendar.google.com&mode=AGENDA&showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&ctz=America/New_York"
-                    style="border: 0"
-                    width="100%"
-                    height="600">
-                </iframe>
-                  <a href="webcal://calendar.google.com/calendar/ical/firstpentecostalchurch.com_e2hia2v3bc766ff9397qu3eqa8%40group.calendar.google.com/public/basic.ics"><i class="fa-solid fa-calendar-plus"></i> Subscribe via iCal</a>
+                <!-- Contact Modal -->
+                <div id="contact-modal" class="modal">
+                  <div class="modal-content">
+                    <span class="close" onclick="closeModal('contact-modal')">&times;</span>
+                    <h2>Contact Us</h2>
+                    <br/>
+                    <form action="https://formspree.io/f/mnqkqzqv" method="POST">
+                      <label for="name">Name</label>
+                      <input type="text" name="name" required>
+
+                      <label for="email">Email</label>
+                      <input type="email" name="_replyto" required>
+
+                      <label for="message">Message</label>
+                      <textarea name="message" rows="4" required></textarea>
+
+                      <button type="submit" class="btn">Send</button>
+                    </form>
+                  </div>
+                </div>
+
             </section>
 
             <!-- Videos -->
@@ -126,6 +139,60 @@
               </div>
             </section>
 
+            <!-- Abundance Groups -->
+            <section id="small-groups">
+              <h1><i class="fa-solid fa-people-group"></i> Small Groups</h1>
+              <br/>
+              <div class="card">
+                <h2>Abundance Groups</h2>
+                <p>Abundance Groups are small gatherings designed to help you grow spiritually, build meaningful relationships, and experience the fullness of life in Christ. These groups meet regularly in homes and online, offering a safe space to connect, learn, and serve.</p>
+              </div>
+
+                <div class="card">
+                  <h2>Sign-in to Your Group</h2>
+                  <p>Already a member of an Abundance Group?  Type your group password in the field below and click "Sign-in" to join your group's virtual meeting.</p>
+                  <div id="group-interface">
+                        <script>
+                            function yourFunction(){
+                              var groupnumber = document.getElementById("keywords").value
+                              var action_src = "https://meet.jit.si/" + "FPCAbundanceGroup" + groupnumber;
+                              var your_form = document.getElementById('your_form');
+                                your_form.action = action_src ;
+                            }
+                        </script>
+                        <form id="your_form" onsubmit="yourFunction()" style="overflow: hidden;">
+                            <input type="text" name="FPCAbundanceGroup" id="keywords" style="font-size: 16px">
+                            <input type="submit" class="btn" value="Sign-In">
+                        </form>
+                    </div>
+                </div>
+
+                  <div class="card">
+                    <h2>Sign Up</h2>
+                    <p>Fill out the form below to join one of our Abundance Groups. We’ll help you find a group that fits your schedule and interests.</p>
+
+                    <form action="https://formspree.io/f/mnqkqzqv" method="POST">
+                      <label for="name">Full Name</label>
+                      <input type="text" id="name" name="name" required>
+
+                      <label for="email">Email Address</label>
+                      <input type="email" id="email" name="_replyto" required>
+
+                      <label for="phone">Phone Number</label>
+                      <input type="tel" id="phone" name="phone">
+
+                      <label for="group">Preferred Group (if known)</label>
+                      <input type="text" id="group" name="group">
+
+                      <label for="notes">Additional Notes</label>
+                      <textarea id="notes" name="notes" rows="4"></textarea>
+
+                      <button type="submit" class="btn">Submit</button>
+                    </form>
+                  </div>
+            </section>
+
+
             <!-- Bible Class -->
             <section id="bible-class">
               <h1><i class="fa-solid fa-book-bible"></i> Bible Class</h1>
@@ -134,8 +201,21 @@
                 <h2>Grow in the Word</h2>
                 <p>Join us every <strong>Thursday evening at 7:30 PM</strong> for Bible Class. These sessions are designed to deepen your understanding of Scripture, strengthen your walk with God, and connect with others in faith.</p>
                 <p>Whether you're new to the Bible or a seasoned student, our interactive classes offer something for everyone.</p>
-                <a href="https://meet.jit.si/FPCNeptuneBibleClass">Sign In Here</a>
+                <a href="https://meet.jit.si/FPCNeptuneBibleClass" class="btn">Sign In Here</a>
               </div>
+            </section>
+
+            <!-- Calendar -->
+            <section id="calendar">
+              <h1><i class="fa-solid fa-calendar-days"></i> Calendar</h1>
+                <iframe
+                    title="calendar"
+                    src="https://calendar.google.com/calendar/embed?src=firstpentecostalchurch.com_e2hia2v3bc766ff9397qu3eqa8@group.calendar.google.com&mode=AGENDA&showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&ctz=America/New_York"
+                    style="border: 0"
+                    width="100%"
+                    height="600">
+                </iframe>
+                  <a href="webcal://calendar.google.com/calendar/ical/firstpentecostalchurch.com_e2hia2v3bc766ff9397qu3eqa8%40group.calendar.google.com/public/basic.ics" class="btn"><i class="fa-solid fa-calendar-plus"></i> Subscribe via iCal</a>
             </section>
 
             <!-- Offering -->
