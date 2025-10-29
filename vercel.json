@@ -18,6 +18,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "sw.js",
+      "use": "@vercel/static"
+    },
+    {
       "src": "icons/**/*",
       "use": "@vercel/static"
     }
