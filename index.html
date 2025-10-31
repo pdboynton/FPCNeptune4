@@ -5,15 +5,15 @@
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#2c3e50" />
         <meta charset="UTF-8" />
-        <link rel="stylesheet" href="/styles.css" />
+        <link rel="stylesheet" href="styles.css" />
         <!-- Font Awesome 6 CDN -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <title>First Pentecostal Church-Neptune</title>
-        <script src="/app.js"></script>
+        <script src="app.js"></script>
     </head>
     <body>
         <div class="home-header">
-            <img src="/icons/icon-192.png" alt="FPC Logo" class="FPC-logo" />
+            <img src="icons/icon-192.png" alt="FPC Logo" class="FPC-logo" />
             <div class="home-title">
                 <h1>First Pentecostal Church</h1>
                 <span class="subtitle">"A Place of Abundance"</span>
@@ -45,14 +45,10 @@
                 <p>We’re so glad you’re here! Whether you're exploring faith or looking for a church home, we invite you to experience the love, worship, and fellowship that define our community.</p>
               </div>
               <div class="invitation-card">
-                <h3>Join Us This Week</h3>
-                <ul>
-                  <li><strong>Sunday Worship:</strong> 11:15 AM</li>
-                  <li><strong>Bible Study:</strong> Thursdays at 7:30 PM</li>
-                  <li><strong>Prayer Meetings:</strong> Mondays at 10:00 AM
-                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wednesdays at 12:00 PM
-                    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Saturdays at 12:00 PM</li>
-                </ul>
+                <h3>Join Us This Week</h3><br/>
+                <span><strong>Sunday Worship</strong> @ 11:15 AM <a href="https://maps.google.com/?q=144+Oxonia+Ave,+Neptune,+NJ" target="_blank">in-person</a> or </span><button onclick="navigateToSection('watch')" class="text-button">virtually</button><br/>
+                <span><strong>Bible Study</strong> on Thursdays at 7:30 PM </span><button onclick="navigateToSection('bible-class')" class="text-button">virtually</button><br/>
+                <span><strong>Prayer Meetings</strong> Mondays at 10:00 AM, Wednesdays at 12:00 PM and Saturdays at 12:00 PM</span><br/>
                 <p>Come as you are and experience the life changing power of Jesus Christ.</p>
               </div>
 
@@ -244,7 +240,7 @@
               <div class="card">
                 <h2>Support the Ministry</h2>
                 <p>Your generosity helps us continue our mission to serve the community, spread the Gospel, and maintain our place of worship. Thank you for your faithfulness!</p>
-
+                <p>You may Zelle us at firstpentecostal@gmail.com or...</p>
                 <div class="giving-options">
                   <a href="https://www.paypal.com/donate/?hosted_button_id=2JZ8Z5Y9ZKX3G" target="_blank" class="give-btn">
                     <i class="fa-brands fa-paypal"></i> Donate via PayPal
@@ -253,9 +249,13 @@
                     <i class="fa-solid fa-dollar-sign"></i> Give via Cash App
                   </a>
                 </div>
+                <div class="note">
+                  <strong>Prefer to give in person?</strong>
+                  <p>Offerings are received during each service. Thank you for your continued support!</p>
+                </div>
 
-                <p class="note">Prefer to give in person? Offerings are received during each service. Thank you for your continued support!</p>
               </div>
+              
             </section>
 
             <!-- Settings -->

@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
   fontSlider.addEventListener("input", () => {
     const scaleMap = {
       1: 1.0,
-      2: 1.05,
-      3: 1.1
+      2: 1.25,
+      3: 1.5
     };
     const scale = scaleMap[fontSlider.value];
     document.documentElement.style.setProperty("--text-scale", scale);

@@ -98,6 +98,22 @@ h3 {
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
+.invitation-card a{
+  color: var(--accent);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.text-button {
+  background: none; /* Removes any background color */
+  margin: 0;
+  padding: 0;
+  border: none;    /* Removes any border */
+  font-size: inherit; /* Inherits the text color from its parent element */
+  color: var(--accent);
+  font-weight: bold;
+}
+
 .welcome-card h2 {
   font-size: 1.2rem;
   margin-top: 0;
