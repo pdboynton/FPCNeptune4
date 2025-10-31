@@ -20,7 +20,7 @@
 
 body {
   margin: 0;
-  width: 100%;
+  width: 100vw;
   font-family: 'Segoe UI', sans-serif;
   background-color: var(--bg);
   color: var(--text);
@@ -112,12 +112,6 @@ h3 {
   font-size: inherit; /* Inherits the text color from its parent element */
   color: var(--accent);
   font-weight: bold;
-}
-
-.welcome-card h2 {
-  font-size: 1.2rem;
-  margin-top: 0;
-  color: var(--accent);
 }
 
 .invitation-card ul, .mission-card ul {
@@ -377,8 +371,8 @@ h3 {
 }
 
 .note {
-  font-size: 0.9rem;
   color: var(--accent);
+  font-size: calc(.95rem * var(--text-scale));
 }
 
 /* Settings */
@@ -569,7 +563,6 @@ form .btn:hover {
 .video-card h3 {
   margin: 0;
   padding: 10px;
-  font-size: 1rem;
   color: var(--text);
 
 }
@@ -686,7 +679,7 @@ form .btn:hover {
   padding: 0 1rem;
   background: var(--card);
   border-radius: 8px;
-  height: calc(100vh - 300px); /* Adjust offset as needed */
+  height: calc(100vh - 225px); /* Adjust offset as needed */
   overflow-y: auto; /* Enable vertical scrolling */
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   scroll-behavior: smooth;
@@ -694,18 +687,28 @@ form .btn:hover {
 
 .date-header {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: calc(1.15rem * var(--text-scale));
   margin-top: 2rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
 .event-card {
-  padding: 1rem;
+  padding: 1rem 0;
   border-bottom: 1px solid var(--border);
   cursor: pointer;
 }
 
 .event-card:hover {
   background: var(--hover);
+}
+
+.color-dot {
+  display: inline-block; /* Allows the span to have width/height and sit next to text */
+  width: 10px; /* Size of the dot */
+  height: 10px; /* Size of the dot */
+  background-color: var(--accent); /* Color of the dot */
+  border-radius: 50%; /* Makes it a circle */
+  margin-right: 15px; /* Spacing between the dot and text */
+  vertical-align: middle; /* Aligns the dot vertically with text */
 }
