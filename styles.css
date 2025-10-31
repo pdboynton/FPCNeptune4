@@ -285,7 +285,6 @@ h3 {
 
 #side-menu li {
   padding: 0.5rem 0;
-  font-size: 1rem;
   color: var(--accent);
 }
 
@@ -400,14 +399,6 @@ h3 {
   color: var(--text);
 }
 
-.font-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  color: var(--accent);
-  margin-bottom: 1rem;
-}
-
 .toggle-row {
   display: flex;
   justify-content: space-between;
@@ -429,7 +420,7 @@ body {
 .font-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: calc(0.9rem * var(--text-scale));
   color: var(--secondary);
   margin-bottom: 1rem;
 }
@@ -595,7 +586,7 @@ form .btn:hover {
 }
 
 .circle-arrow {
-  position: absolute;
+  position: fixed;
   width: 40px;
   height: 40px;
   border-radius: 50%;
