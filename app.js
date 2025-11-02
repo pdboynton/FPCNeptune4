@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuItems = document.getElementById("menu-items");
   const sections = document.querySelectorAll("#app section");
 
+  // Close video modals
+  document.getElementById("close-video-btn").addEventListener("click", closeVideoModal);
+  
   // Toggle menu
   hamburger.addEventListener("click", () => {
     sideMenu.classList.toggle("visible");
@@ -46,21 +49,71 @@ document.addEventListener("DOMContentLoaded", () => {
   const fontSlider = document.getElementById("font-size-slider");
   const darkToggle = document.getElementById("dark-mode-toggle");
 
-  // Font size scaling: 1 = 1.0, 2 = 1.05, 3 = 1.1
+   // Font size scaling: 1 = 1.0, 2 = 1.25, 3 = 1.5
+  const scaleMap = {
+    1: 1.0,
+    2: 1.25,
+    3: 1.5
+  };
+
+  // On load — apply saved font scale if it exists
+  const savedFontScaleValue = localStorage.getItem("fontScaleValue");
+  if (savedFontScaleValue) {
+    fontSlider.value = savedFontScaleValue;
+    const scale = scaleMap[savedFontScaleValue];
+    document.documentElement.style.setProperty("--text-scale", scale);
+  }
+
+  // When user moves the slider, apply and save the scale
   fontSlider.addEventListener("input", () => {
-    const scaleMap = {
-      1: 1.0,
-      2: 1.25,
-      3: 1.5
-    };
     const scale = scaleMap[fontSlider.value];
     document.documentElement.style.setProperty("--text-scale", scale);
+    localStorage.setItem("fontScaleValue", fontSlider.value);
   });
+
 
   // Dark mode toggle
   darkToggle.addEventListener("change", () => {
     document.documentElement.classList.toggle("dark", darkToggle.checked);
+    localStorage.setItem("darkMode", darkToggle.checked);
   });
+
+  // Pull dark mode On load
+  if (localStorage.getItem("darkMode") === "true") {
+    document.documentElement.classList.add("dark");
+    darkToggle.checked = true;
+  }
+
+  // ====== Reminders Toggle ======
+  const remindersToggle = document.getElementById("reminders-toggle");
+
+  // Load saved setting
+  const remindersEnabled = localStorage.getItem("eventReminders") === "true";
+  remindersToggle.checked = remindersEnabled;
+
+  // Apply on load if already enabled
+  if (remindersEnabled) {
+    enableEventReminders();
+  }
+
+  remindersToggle.addEventListener("change", async () => {
+    if (remindersToggle.checked) {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        localStorage.setItem("eventReminders", "true");
+        showToast("Event reminders enabled.");
+        enableEventReminders();
+      } else {
+        remindersToggle.checked = false;
+        showToast("Notification permission denied.");
+      }
+    } else {
+      localStorage.setItem("eventReminders", "false");
+      showToast("Event reminders disabled.");
+      clearScheduledReminders();
+    }
+  });
+
   
   const wipeBtn = document.getElementById("wipe-data-btn");
   const updateBtn = document.getElementById("update-now-btn");
@@ -68,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Wipe localStorage and reload
   wipeBtn.addEventListener("click", () => {
     localStorage.clear();
-    alert("App data wiped. Reloading...");
+    showToast("App data wiped. Reloading...");
     location.reload();
   });
 
@@ -78,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.serviceWorker.getRegistrations().then(registrations => {
           registrations.forEach(reg => reg.update());
             showToast("Service Worker update triggered. Reloading...");
-            setTimeout(() => location.reload(true), 1500); // force reload from source
+            setTimeout(() => location.reload(), 1500); // force reload from source
           });
     } else {
       showToast("No active Service Worker found.");
@@ -101,7 +154,7 @@ function openModal(id) {
   modal.addEventListener("click", function handleClickOutside(e) {
     if (e.target.classList.contains("modal")) {
       closeModal(id);
-      modal.removeEventListener("click", handleClickOutside);
+      modal.removeEventListener("click", handleClickOutside, {once: true});
     }
   });
 }
@@ -177,7 +230,7 @@ function openVideoModal(videoId) {
   modal.addEventListener("click", function handleClickOutside(e) {
     if (e.target.classList.contains("modal")) {
       closeVideoModal();
-      modal.removeEventListener("click", handleClickOutside);
+      modal.removeEventListener("click", handleClickOutside, {once: true});
     }
   });
 }
@@ -202,29 +255,42 @@ async function fetchCalendarEvents() {
   try {
     const res = await fetch(url);
     const data = await res.json();
+
     events = data.items.map((event, i) => {
-    const isAllDay = !!event.start.date;
-    const rawStart = event.start.dateTime || event.start.date;
-    const start = isAllDay ? new Date(rawStart + "T12:00:00") // all-day events: safe local noon
-      : new Date(new Date(rawStart).toLocaleString()); // force local time for timed events
-      
-    return {
-      title: event.summary || "Untitled Event",
-      start,
-      location: event.location || "No location",
-      description: event.description || "No description",
-      isAllDay,
-      index: i // store index
-    };
-  });
+      const isAllDay = !!event.start.date;
+
+      let start;
+      if (isAllDay) {
+        // Interpret all-day events as local midnight, not UTC
+        const [year, month, day] = event.start.date.split("-");
+        start = new Date(year, month - 1, day, 0, 0, 0);
+      } else {
+        // Timed events already include timezone info in dateTime
+        start = new Date(event.start.dateTime);
+      }
+
+      return {
+        title: event.summary || "Untitled Event",
+        start,
+        location: event.location || "No location",
+        description: event.description || "No description",
+        isAllDay,
+        index: i,
+      };
+    });
 
     localStorage.setItem("cachedEvents", JSON.stringify(events));
     renderAgenda();
+    
+    if (localStorage.getItem("eventReminders") === "true") {
+      enableEventReminders();
+    }
+
   } catch (err) {
     console.error("Failed to fetch events:", err);
     const cached = localStorage.getItem("cachedEvents");
     if (cached) {
-      events = JSON.parse(cached);
+      events = JSON.parse(cached).map((ev) => ({ ...ev, start: new Date(ev.start) }));
       renderAgenda();
     } else {
       document.getElementById("agenda-list").innerHTML = "<p>Unable to load events.</p>";
@@ -232,11 +298,25 @@ async function fetchCalendarEvents() {
   }
 }
 
+function groupEventsByDate(events) {
+  return events.reduce((acc, event) => {
+    const y = event.start.getFullYear();
+    const m = String(event.start.getMonth() + 1).padStart(2, "0");
+    const d = String(event.start.getDate()).padStart(2, "0");
+    const key = `${y}-${m}-${d}`; // local day only
+    acc[key] = acc[key] || [];
+    acc[key].push(event);
+    return acc;
+  }, {});
+}
+
 function renderAgenda() {
   const grouped = groupEventsByDate(events);
   const list = document.getElementById("agenda-list");
-  list.innerHTML = Object.entries(grouped).map(([dateStr, items]) => {
-    const dateObj = new Date(dateStr); // safely parse ISO date
+  const sortedEntries = Object.entries(grouped).sort(([a], [b]) => new Date(a) - new Date(b));
+    list.innerHTML = sortedEntries.map(([dateStr, items]) => {
+    const [year, month, day] = dateStr.split("-");
+    const dateObj = new Date(year, month - 1, day); // local midnight
     return `
       <div class="date-header">${formatDate(dateObj)}</div>
       ${items.map(event => `
@@ -247,16 +327,6 @@ function renderAgenda() {
       `).join("")}
     `;
   }).join("");
-}
-
-function groupEventsByDate(events) {
-  return events.reduce((acc, event) => {
-    const dateKey = new Date(event.start.getFullYear(), event.start.getMonth(), event.start.getDate());
-    const key = dateKey.toISOString().split("T")[0]; // ISO format for consistent grouping
-    acc[key] = acc[key] || [];
-    acc[key].push(event);
-    return acc;
-  }, {});
 }
 
 function formatDate(date) {
@@ -286,7 +356,7 @@ function openEventModal(index) {
   modal.addEventListener("click", function handleClickOutside(e) {
     if (e.target.classList.contains("modal")) {
       closeEventModal();
-      modal.removeEventListener("click", handleClickOutside);
+      modal.removeEventListener("click", handleClickOutside, {once: true});
     }
   });
 }
@@ -322,6 +392,56 @@ function showToast(message) {
     toast.classList.remove("visible");
     setTimeout(() => toast.remove(), 300);
   }, 3000);
+}
+
+let reminderTimers = [];
+
+// Schedules notifications for upcoming events (within next 24 hours)
+function enableEventReminders() {
+  if (!("Notification" in window)) {
+    showToast("Notifications not supported in this browser.");
+    return;
+  }
+
+  clearScheduledReminders(); // prevent duplicates
+
+  const now = Date.now();
+  const cutoff = now + 24 * 60 * 60 * 1000; // next 24 hours
+
+  events.forEach(event => {
+    const time = event.start.getTime();
+    if (time > now && time < cutoff) {
+      const delay = time - now - (5 * 60 * 1000); // 5 minutes before
+      if (delay > 0) {
+        const timerId = setTimeout(() => {
+          showEventNotification(event);
+        }, delay);
+        reminderTimers.push(timerId);
+      }
+    }
+  });
+
+  console.log(`Scheduled ${reminderTimers.length} reminders`);
+}
+
+function showEventNotification(event) {
+  const title = "Upcoming Event Reminder";
+  const body = `${event.title} at ${formatTime(event.start, event.isAllDay)}\n${event.location || ""}`;
+  const icon = "/icons/icon-192.png"; // optional, path to your PWA icon
+
+  // If Service Worker is active, use it (better UX)
+  if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.ready.then(reg => {
+      reg.showNotification(title, { body, icon });
+    });
+  } else {
+    new Notification(title, { body, icon });
+  }
+}
+
+function clearScheduledReminders() {
+  reminderTimers.forEach(id => clearTimeout(id));
+  reminderTimers = [];
 }
 
 window.addEventListener("load", fetchCalendarEvents);
