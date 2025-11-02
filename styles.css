@@ -39,7 +39,7 @@ body {
   gap: 1rem;
   padding: 1rem;
   z-index: 100; /* ensures it stays above other elements */
-  background-color: var(--bg)
+  background-color: var(--bg);
 }
 
 .home-header h1{
@@ -67,7 +67,7 @@ body {
 #app {
   box-sizing: border-box;
   padding: 6rem 1rem 0 1rem;
-  max-width: 100%;
+  max-width: 94%;
   margin: auto;
 }
 
@@ -263,28 +263,31 @@ h3 {
   position: fixed;
   top: 0;
   right: 0;
-  width: 250px;
-  height: 100%;
-  background: var(--card);
-  box-shadow: -2px 0 5px rgba(0,0,0,0.2);
-  padding: 1rem;
-  transform: translateX(100%);
+  width: fit-content;
+  height: fit-content;
+  background: var(--bg);
+  box-shadow: -2px 2px 5px rgba(0,0,0,0.2);
+  padding: 0 1rem .5rem 1rem;
+  margin-top: 92px;
+  transform: translateY(-150%);
   transition: transform 0.3s ease;
-  z-index: 101;
+  z-index: 99;
 }
 
 #side-menu.visible {
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 #side-menu ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 #side-menu li {
   padding: 0.5rem 0;
   color: var(--accent);
+  font-size: 1.2rem
 }
 
 /* Card Styles*/
@@ -700,4 +703,22 @@ form .btn:hover {
   border-radius: 50%; /* Makes it a circle */
   margin-right: 15px; /* Spacing between the dot and text */
   vertical-align: middle; /* Aligns the dot vertically with text */
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+.toast.visible {
+  opacity: 1;
 }
