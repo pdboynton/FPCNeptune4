@@ -1,3 +1,4 @@
+// Leaving this file but not implementing at the moment
 // Import Firebase and messaging service
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';

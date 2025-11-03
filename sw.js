@@ -78,7 +78,7 @@ self.addEventListener("notificationclick", event => {
     })
   );
 });
-
+/* Disabled Firebase code below
 // Import Firebase and messaging service
 importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js');
@@ -119,5 +119,5 @@ messaging.onBackgroundMessage(function(payload) {
 // If you have other existing service worker logic (e.g., caching), keep it here
 self.addEventListener('fetch', function(event) {
   // Your caching or network logic
-  event.respondWith(/* your fetch logic here */);
-});
+  event.respondWith(/* your fetch logic here /);
+});*/
