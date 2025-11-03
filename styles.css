@@ -6,6 +6,8 @@
   --highlight: #E3B23C;
   --card: #FFFFFF;
   --border: #D1D5DB;
+  --red: #A53A3A;
+  --green: #66A53A;
   --text-scale: 1; /* default scale */
 }
 :root.dark{
@@ -16,6 +18,8 @@
   --highlight: #F2C94C;
   --card: #2A2E38;
   --border: #3C4049;
+  --red: #C94F4F;
+  --green: #4FC98C;
 }
 
 body {
@@ -334,7 +338,7 @@ h3 {
 .rbtn {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: red;
+  background: var(--red);
   color: white;
   border-radius: 6px;
   text-decoration: none;
@@ -344,7 +348,7 @@ h3 {
 .gbtn {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: green;
+  background: var(--green);
   color: white;
   border-radius: 6px;
   text-decoration: none;
@@ -743,3 +747,5 @@ form .btn:hover {
 .toast.visible {
   opacity: 1;
 }
+
+

@@ -254,7 +254,7 @@
               <div class="card">
                 <h2>Support the Ministry</h2>
                 <p>Your generosity helps us continue our mission to serve the community, spread the Gospel, and maintain our place of worship. Thank you for your faithfulness!</p>
-                <p>You may Zelle us at firstpentecostal@gmail.com or...</p>
+                <p>You may <strong>Zelle us at firstpentecostal@gmail.com </strong>or...</p>
                 <div class="giving-options">
                   <a href="https://www.paypal.com/donate/?hosted_button_id=2JZ8Z5Y9ZKX3G" target="_blank" class="give-btn">
                     <i class="fa-brands fa-paypal"></i> Donate via PayPal
@@ -298,12 +298,19 @@
                 </div>
               </div>
               <div class="card">
-                <h2>Reminders/Notifications</h2>
+                <h2>Notifications</h2>
                 <div class="toggle-row">
-                    <label for="reminders-toggle">Enable Event Reminders</label>
-                    <label class="switch">
-                      <input type="checkbox" id="reminders-toggle">
-                      <span class="slider"></span>
+                  <label for="reminders-toggle">Enable Event Reminders</label>
+                  <label class="switch">
+                    <input type="checkbox" id="reminders-toggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="toggle-row">
+                  <label for="notification-toggle">Enable Push Notifications</label>
+                  <label class="switch">
+                    <input type="checkbox" id="notification-toggle">
+                    <span class="slider"></span>
                   </label>
                 </div>
               </div>
@@ -322,9 +329,8 @@
                   </button>
                 </div>
               </div>
-
             </section>
-
         </div>
+      <script src="firebase.js"></script>
     </body>
 </html>
