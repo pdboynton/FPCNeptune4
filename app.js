@@ -8,22 +8,18 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-// === Firebase Cloud Messaging Setup (non-module, Vercel compatible) ===
-
-// Vercel injects NEXT_PUBLIC_ variables at build time — they become literal values here
+// === Firebase Cloud Messaging Setup ===
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  apiKey: window.__ENV__.FIREBASE_API_KEY,
   authDomain: "fpc-neptune.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  projectId: window.__ENV__.FIREBASE_PROJECT_ID,
+  messagingSenderId: window.__ENV__.FIREBASE_MESSAGING_SENDER_ID,
+  appId: window.__ENV__.FIREBASE_APP_ID
 };
 
-// Initialize Firebase (using compat build since we’re in non-module script mode)
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Ask for permission and get the token
 async function enablePushNotifications() {
   try {
     const permission = await Notification.requestPermission();
@@ -35,7 +31,7 @@ async function enablePushNotifications() {
     const registration = await navigator.serviceWorker.ready;
 
     const token = await messaging.getToken({
-      vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, // pulled from Vercel
+      vapidKey: window.__ENV__.FIREBASE_VAPID_KEY,
       serviceWorkerRegistration: registration
     });
 
@@ -44,7 +40,7 @@ async function enablePushNotifications() {
       console.log("✅ FCM Token:", token);
       showToast("Push notifications enabled.");
     } else {
-      console.warn("⚠️ No FCM token available. Check permissions.");
+      console.warn("⚠️ No FCM token available.");
     }
   } catch (err) {
     console.error("❌ Error enabling push notifications:", err);
@@ -56,6 +52,7 @@ function disablePushNotifications() {
   localStorage.removeItem("fcmToken");
   showToast("Push notifications disabled.");
 }
+
 
 // Waits until after DOM is finished loading
 document.addEventListener("DOMContentLoaded", () => {
