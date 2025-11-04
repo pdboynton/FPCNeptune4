@@ -8,15 +8,21 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-// === Firebase Cloud Messaging Setup ===
+// === Firebase Cloud Messaging Setup (embedded config, safe for frontend) ===
+
+// Your public Firebase project settings
 const firebaseConfig = {
-  apiKey: window.__ENV__.FIREBASE_API_KEY,
+  apiKey: "AIzaSyCbJubEYeW3HVK2mmyrA3Suz2qdgPMyfo0",
   authDomain: "fpc-neptune.firebaseapp.com",
-  projectId: window.__ENV__.FIREBASE_PROJECT_ID,
-  messagingSenderId: window.__ENV__.FIREBASE_MESSAGING_SENDER_ID,
-  appId: window.__ENV__.FIREBASE_APP_ID
+  projectId: "fpc-neptune",
+  messagingSenderId: "412324032446",
+  appId: "1:412324032446:web:ebf8459bab0d8b215b13ef"
 };
 
+// Your PUBLIC VAPID key from Firebase Console → Cloud Messaging → Web Push certificates
+const firebaseVapidKey = "BJMildhiI-lq1yYGwYXhnZeO-3hYClXId66QVCiyxn-zOchKYXDBhou-DeNHvzlGuDKJ3WAdzBNwQF_XOxMyRFg"; // 11-3-25 VAPID key
+
+// Initialize Firebase (compat version for non-module usage)
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
@@ -30,8 +36,9 @@ async function enablePushNotifications() {
 
     const registration = await navigator.serviceWorker.ready;
 
+    // Request an FCM token
     const token = await messaging.getToken({
-      vapidKey: window.__ENV__.FIREBASE_VAPID_KEY,
+      vapidKey: firebaseVapidKey,
       serviceWorkerRegistration: registration
     });
 
@@ -40,7 +47,7 @@ async function enablePushNotifications() {
       console.log("✅ FCM Token:", token);
       showToast("Push notifications enabled.");
     } else {
-      console.warn("⚠️ No FCM token available.");
+      console.warn("⚠️ No FCM token returned. Check permissions or VAPID key.");
     }
   } catch (err) {
     console.error("❌ Error enabling push notifications:", err);
