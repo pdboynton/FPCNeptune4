@@ -78,46 +78,22 @@ self.addEventListener("notificationclick", event => {
     })
   );
 });
-/* Disabled Firebase code below
-// Import Firebase and messaging service
-importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js');
 
-// Your Firebase configuration
-const firebaseConfig = {
+// === Firebase Messaging for background push ===
+importScripts("https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/11.0.1/firebase-messaging-compat.js");
+
+firebase.initializeApp({
   apiKey: "AIzaSyCbJubEYeW3HVK2mmyrA3Suz2qdgPMyfo0",
-  authDomain: "fpc-neptune.firebaseapp.com",
-  databaseURL: "https://fpc-neptune.firebaseio.com",
   projectId: "fpc-neptune",
-  storageBucket: "fpc-neptune.firebasestorage.app",
   messagingSenderId: "412324032446",
   appId: "1:412324032446:web:ebf8459bab0d8b215b13ef"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+});
 
 const messaging = firebase.messaging();
 
-// Add your existing service worker logic here (e.g., caching, etc.)
-
-// Handle push notifications when the app is in the background
-messaging.onBackgroundMessage(function(payload) {
-  console.log('Received background message: ', payload);
-
-  // Customize notification content
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.icon
-  };
-
-  // Show notification to user
-  self.registration.showNotification(notificationTitle, notificationOptions);
+messaging.onBackgroundMessage(payload => {
+  console.log("Received background message ", payload);
+  const { title, body, icon } = payload.notification;
+  self.registration.showNotification(title, { body, icon });
 });
-
-// If you have other existing service worker logic (e.g., caching), keep it here
-self.addEventListener('fetch', function(event) {
-  // Your caching or network logic
-  event.respondWith(/* your fetch logic here /);
-});*/

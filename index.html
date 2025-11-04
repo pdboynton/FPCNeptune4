@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!-- For PWA -->
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#2c3e50" />
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="styles.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <!-- Font Awesome 6 CDN -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-        <title>First Pentecostal Church-Neptune</title>
-        <script src="app.js"></script>
-      <!-- Pixel Code - https://pushify.com/ -->
-      <script defer src="https://pushify.com/pixel/tsQyb6gG3tSP09pM"></script>
-      <!-- END Pixel Code -->
+      <meta name="theme-color" content="#2c3e50" />
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>First Pentecostal Church-Neptune</title>
+      <link rel="stylesheet" href="styles.css" />
+      <!-- For PWA -->
+      <link rel="manifest" href="/manifest.json" />
+      <!-- Font Awesome 6 CDN -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+      <!-- Firebase SDKs for classic scripts -->
+      <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-messaging-compat.js"></script>
+      <!-- Custom Javascript -->
+      <script src="app.js"></script>
     </head>
     <body>
         <div class="home-header">
@@ -316,6 +317,7 @@
                     <span class="slider"></span>
                   </label>
                 </div>
+                <div data-pushify-button></div>
               </div>
               <div class="card" id="app-controls">
                 <h2>Data Management</h2>
@@ -334,6 +336,5 @@
               </div>
             </section>
         </div>
-      <!-- Disabled script src="firebase.js"></script-->
     </body>
 </html>

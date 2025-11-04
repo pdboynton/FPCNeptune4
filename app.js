@@ -8,6 +8,56 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+// === Firebase Cloud Messaging Setup (non-module, Vercel compatible) ===
+
+// Vercel injects NEXT_PUBLIC_ variables at build time — they become literal values here
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: "fpc-neptune.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+};
+
+// Initialize Firebase (using compat build since we’re in non-module script mode)
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+// Ask for permission and get the token
+async function enablePushNotifications() {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      showToast("Push notifications denied.");
+      return;
+    }
+
+    const registration = await navigator.serviceWorker.ready;
+
+    const token = await messaging.getToken({
+      vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY, // pulled from Vercel
+      serviceWorkerRegistration: registration
+    });
+
+    if (token) {
+      localStorage.setItem("fcmToken", token);
+      console.log("✅ FCM Token:", token);
+      showToast("Push notifications enabled.");
+    } else {
+      console.warn("⚠️ No FCM token available. Check permissions.");
+    }
+  } catch (err) {
+    console.error("❌ Error enabling push notifications:", err);
+    showToast("Failed to enable push notifications.");
+  }
+}
+
+function disablePushNotifications() {
+  localStorage.removeItem("fcmToken");
+  showToast("Push notifications disabled.");
+}
+
+// Waits until after DOM is finished loading
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger-menu");
   const sideMenu = document.getElementById("side-menu");
@@ -114,7 +164,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ====== Push Notifications Toggle ======
+  const pushToggle = document.getElementById("notification-toggle");
+
+  // Load saved state
+  pushToggle.checked = !!localStorage.getItem("fcmToken");
+
+  pushToggle.addEventListener("change", async () => {
+    if (pushToggle.checked) {
+      await enablePushNotifications();
+    } else {
+      disablePushNotifications();
+    }
+  });
   
+  // Data Management 
   const wipeBtn = document.getElementById("wipe-data-btn");
   const updateBtn = document.getElementById("update-now-btn");
 
