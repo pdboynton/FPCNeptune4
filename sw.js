@@ -1,6 +1,5 @@
-const CACHE_NAME = "fpc-pwa-cache-v1";
+const CACHE_NAME = "fpc-pwa-cache-v2";
 const urlsToCache = [
-  //"/",
   "/index.html",
   "/styles.css",
   "/app.js",
@@ -31,7 +30,10 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-// Fetch: serve cached content, update in background
+// Fetch: serve cached content, update in background (stale-while-revalidate).
+// Note: this is the single fetch handler — the original file registered this
+// twice, which can throw "respondWith already called" errors in the wrapper's
+// webview and make offline caching unreliable.
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
@@ -39,7 +41,6 @@ self.addEventListener("fetch", event => {
     caches.match(event.request).then(cachedResponse => {
       const fetchPromise = fetch(event.request)
         .then(networkResponse => {
-          // Update cache with latest version
           return caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
@@ -49,21 +50,6 @@ self.addEventListener("fetch", event => {
 
       return cachedResponse || fetchPromise;
     })
-  );
-});
-
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response =>
-      response || fetch(event.request)
-    )
   );
 });
 

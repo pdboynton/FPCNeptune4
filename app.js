@@ -65,15 +65,25 @@ function disablePushNotifications() {
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger-menu");
   const sideMenu = document.getElementById("side-menu");
+  const menuOverlay = document.getElementById("menu-overlay");
   const menuItems = document.getElementById("menu-items");
   const sections = document.querySelectorAll("#app section");
+  const appEl = document.getElementById("app");
+  const headerEl = document.querySelector(".home-header");
 
   // Close video modals
   document.getElementById("close-video-btn").addEventListener("click", closeVideoModal);
-  
-  // Toggle menu
+
+  // Toggle menu (drawer + backdrop together)
   hamburger.addEventListener("click", () => {
     sideMenu.classList.toggle("visible");
+    menuOverlay.classList.toggle("visible");
+  });
+
+  // Tapping the backdrop closes the drawer, same as native nav drawers
+  menuOverlay.addEventListener("click", () => {
+    sideMenu.classList.remove("visible");
+    menuOverlay.classList.remove("visible");
   });
 
   // Build menu from sections
@@ -84,20 +94,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const text = heading.textContent.trim();
       const li = document.createElement("li");
       li.innerHTML = `${icon} ${text}`;
-      li.style.cursor = "pointer";
+      li.dataset.section = section.id;
       li.addEventListener("click", () => {
-        sections.forEach(s => s.style.display = "none");
-        section.style.display = "block";
+        navigateToSection(section.id);
         sideMenu.classList.remove("visible");
+        menuOverlay.classList.remove("visible");
       });
       menuItems.appendChild(li);
     }
   });
 
-  // Show home by default
-  sections.forEach(s => s.style.display = "none");
-  const home = document.getElementById("home");
-  if (home) home.style.display = "block";
+  // Give the header a subtle elevation once content scrolls beneath it
+  if (appEl && headerEl) {
+    appEl.addEventListener("scroll", () => {
+      headerEl.classList.toggle("scrolled", appEl.scrollTop > 4);
+    }, { passive: true });
+  }
+
+  // Lightweight skeleton placeholders shown until live data arrives
+  renderSkeletonPlaceholders();
+
+  // Show the section matching the URL hash (deep link), defaulting to Home.
+  // Using replace (push:false) so the very first load doesn't add a history entry.
+  const startId = (location.hash || "#home").slice(1);
+  showSection(document.getElementById(startId) ? startId : "home", { push: false });
 
   // Settings toggles and sliders
   const fontSlider = document.getElementById("font-size-slider");
@@ -207,11 +227,74 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function navigateToSection(id) {
+// Shows a section with a brief native-style fade/slide transition, updates the
+// active state in the drawer, and (optionally) records the navigation in the
+// browser/native history so the Android hardware back button works as expected.
+function showSection(id, { push = true } = {}) {
+  if (!document.getElementById(id)) id = "home";
+
   const sections = document.querySelectorAll("#app > section");
-  sections.forEach(s => s.style.display = "none");
-  document.getElementById(id).style.display = "block";
-  document.getElementById("app").scrollTo({ top: 0, behavior: "smooth" });
+  sections.forEach(s => {
+    s.style.display = "none";
+    s.classList.remove("section-enter");
+  });
+
+  const target = document.getElementById(id);
+  target.style.display = "block";
+  // Force a reflow so the enter animation replays every time the section is shown
+  void target.offsetWidth;
+  target.classList.add("section-enter");
+
+  document.getElementById("app").scrollTo({ top: 0, behavior: "auto" });
+  setActiveMenuItem(id);
+
+  if (push && location.hash.slice(1) !== id) {
+    history.pushState({ section: id }, "", "#" + id);
+  }
+}
+
+function navigateToSection(id) {
+  showSection(id, { push: true });
+}
+
+function setActiveMenuItem(id) {
+  document.querySelectorAll("#menu-items li").forEach(li => {
+    li.classList.toggle("active", li.dataset.section === id);
+  });
+}
+
+// Android back / iOS swipe-back inside median.co maps to browser history —
+// keep the visible section in sync with it.
+window.addEventListener("popstate", () => {
+  const id = (location.hash || "#home").slice(1);
+  showSection(id, { push: false });
+});
+
+// Shimmer placeholders shown briefly while the YouTube/Calendar APIs respond,
+// so the app never shows a blank panel on first load.
+function renderSkeletonPlaceholders() {
+  const gallery = document.getElementById("youtube-gallery");
+  if (gallery) {
+    gallery.innerHTML = Array.from({ length: 6 }).map(() => `
+      <div class="video-card">
+        <div class="skeleton" style="aspect-ratio:16/9;border-radius:0;"></div>
+        <div style="padding:0.6rem;">
+          <div class="skeleton" style="height:14px;width:85%;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:10px;width:45%;"></div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  const agenda = document.getElementById("agenda-list");
+  if (agenda) {
+    agenda.innerHTML = Array.from({ length: 3 }).map(() => `
+      <div style="padding:0.9rem 0.25rem;">
+        <div class="skeleton" style="height:12px;width:35%;margin-bottom:10px;"></div>
+        <div class="skeleton" style="height:16px;width:75%;"></div>
+      </div>
+    `).join("");
+  }
 }
 
 function openModal(id) {
@@ -436,6 +519,7 @@ function closeEventModal() {
 document.addEventListener("click", (e) => {
   const sideMenu = document.getElementById("side-menu");
   const hamburger = document.getElementById("hamburger-menu");
+  const menuOverlay = document.getElementById("menu-overlay");
 
   if (
     sideMenu.classList.contains("visible") &&
@@ -443,6 +527,7 @@ document.addEventListener("click", (e) => {
     !hamburger.contains(e.target)
   ) {
     sideMenu.classList.remove("visible");
+    menuOverlay.classList.remove("visible");
   }
 });
 

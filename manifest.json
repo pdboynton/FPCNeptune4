@@ -1,20 +1,49 @@
 {
   "name": "First Pentecostal Church",
   "short_name": "FPC Neptune",
+  "description": "Watch services, join Bible study and Abundance Groups, view the church calendar, and give — all from First Pentecostal Church, Neptune.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2c3e50",
+  "display_override": ["standalone"],
+  "orientation": "portrait-primary",
+  "lang": "en-US",
+  "background_color": "#F5F7FA",
+  "theme_color": "#F5F7FA",
+  "categories": ["lifestyle", "social"],
   "icons": [
     {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Watch Live",
+      "short_name": "Watch",
+      "url": "/#watch",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Calendar",
+      "short_name": "Calendar",
+      "url": "/#calendar",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Give",
+      "short_name": "Give",
+      "url": "/#giving",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
