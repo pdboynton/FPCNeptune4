@@ -86,28 +86,27 @@ document.addEventListener("DOMContentLoaded", () => {
     menuOverlay.classList.remove("visible");
   });
 
-  // Build menu from sections
+  // Build menu from data-title / data-icon attributes on each section
   sections.forEach(section => {
-    const heading = section.querySelector("h1");
-    if (heading) {
-      const icon = heading.querySelector("i")?.outerHTML || "";
-      const text = heading.textContent.trim();
-      const li = document.createElement("li");
-      li.innerHTML = `${icon} ${text}`;
-      li.dataset.section = section.id;
-      li.addEventListener("click", () => {
-        navigateToSection(section.id);
-        sideMenu.classList.remove("visible");
-        menuOverlay.classList.remove("visible");
-      });
-      menuItems.appendChild(li);
-    }
+    const title = section.dataset.title;
+    const icon  = section.dataset.icon;
+    if (!title) return;
+    const li = document.createElement("li");
+    li.innerHTML = icon ? `<i class="${icon}"></i> ${title}` : title;
+    li.dataset.section = section.id;
+    li.addEventListener("click", () => {
+      navigateToSection(section.id);
+      sideMenu.classList.remove("visible");
+      menuOverlay.classList.remove("visible");
+    });
+    menuItems.appendChild(li);
   });
 
   // Give the header a subtle elevation once content scrolls beneath it
-  if (appEl && headerEl) {
-    appEl.addEventListener("scroll", () => {
-      headerEl.classList.toggle("scrolled", appEl.scrollTop > 4);
+  // NOTE: #app is not a scroll container — the window scrolls, not the div.
+  if (headerEl) {
+    window.addEventListener("scroll", () => {
+      headerEl.classList.toggle("scrolled", window.scrollY > 4);
     }, { passive: true });
   }
 
@@ -298,16 +297,7 @@ function renderSkeletonPlaceholders() {
 }
 
 function openModal(id) {
-  const modal = document.getElementById(id);
-  modal.style.display = "block";
-  
-  // Add outside click listener to the modal overlay
-  modal.addEventListener("click", function handleClickOutside(e) {
-    if (e.target.classList.contains("modal")) {
-      closeModal(id);
-      modal.removeEventListener("click", handleClickOutside, {once: true});
-    }
-  });
+  document.getElementById(id).style.display = "block";
 }
 
 function closeModal(id) {
@@ -376,14 +366,6 @@ function openVideoModal(videoId) {
   const player = document.getElementById("video-player");
   player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
   modal.style.display = "block";
-  
-  // Add outside click listener to the modal overlay
-  modal.addEventListener("click", function handleClickOutside(e) {
-    if (e.target.classList.contains("modal")) {
-      closeVideoModal();
-      modal.removeEventListener("click", handleClickOutside, {once: true});
-    }
-  });
 }
 
 function closeVideoModal() {
@@ -502,14 +484,6 @@ function openEventModal(index) {
   document.getElementById("modal-description").textContent = event.description;
   document.getElementById("event-modal").style.display = "block";
   
-  // Add outside click listener to the modal overlay
-  const modal = document.getElementById("event-modal");
-  modal.addEventListener("click", function handleClickOutside(e) {
-    if (e.target.classList.contains("modal")) {
-      closeEventModal();
-      modal.removeEventListener("click", handleClickOutside, {once: true});
-    }
-  });
 }
 
 function closeEventModal() {
@@ -529,6 +503,19 @@ document.addEventListener("click", (e) => {
     sideMenu.classList.remove("visible");
     menuOverlay.classList.remove("visible");
   }
+});
+
+// Single delegated outside-click handler for every modal.
+// Registered once at module scope — no per-open listener accumulation.
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("modal")) return;
+  const modal = e.target;
+  // Stop the video iframe from continuing to play in the background
+  if (modal.id === "video-modal") {
+    const player = document.getElementById("video-player");
+    if (player) player.src = "";
+  }
+  modal.style.display = "none";
 });
 
 function showToast(message) {
