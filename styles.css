@@ -178,6 +178,7 @@ button {
 
 /* Hamburger — native icon-button with tap feedback */
 #hamburger-menu {
+  margin-left: auto;
   flex-shrink: 0;
   width: 44px;
   height: 44px;
@@ -848,7 +849,7 @@ form .btn {
 }
 
 .circle-arrow {
-  position: absolute;
+  position: fixed;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -862,11 +863,14 @@ form .btn {
   justify-content: center;
   box-shadow: var(--shadow-sm);
   transition: transform var(--motion-fast);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
 }
 
-.circle-arrow.left { left: 0; top: 50%; transform: translateY(-50%); }
+.circle-arrow.left { left: 6px; }
 .circle-arrow.left:active { transform: translateY(-50%) scale(0.92); }
-.circle-arrow.right { right: 0; top: 50%; transform: translateY(-50%); }
+.circle-arrow.right { right: 6px; }
 .circle-arrow.right:active { transform: translateY(-50%) scale(0.92); }
 
 #page-indicator { font-weight: 700; color: var(--text-muted); font-size: 0.9rem; }
