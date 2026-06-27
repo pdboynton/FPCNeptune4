@@ -63,28 +63,32 @@ function disablePushNotifications() {
 
 // Waits until after DOM is finished loading
 document.addEventListener("DOMContentLoaded", () => {
-  const hamburger = document.getElementById("hamburger-menu");
-  const sideMenu = document.getElementById("side-menu");
+  const hamburger   = document.getElementById("hamburger-menu");
+  const sideMenu    = document.getElementById("side-menu");
   const menuOverlay = document.getElementById("menu-overlay");
-  const menuItems = document.getElementById("menu-items");
-  const sections = document.querySelectorAll("#app section");
-  const appEl = document.getElementById("app");
-  const headerEl = document.querySelector(".home-header");
+  const menuItems   = document.getElementById("menu-items");
+  const sections    = document.querySelectorAll("#app section");
+  const headerEl    = document.querySelector(".home-header");
 
-  // Close video modals
-  document.getElementById("close-video-btn").addEventListener("click", closeVideoModal);
+  // Close video modal — guard against element not yet in DOM (iOS PWA timing)
+  const closeVideoBtn = document.getElementById("close-video-btn");
+  if (closeVideoBtn) closeVideoBtn.addEventListener("click", closeVideoModal);
 
   // Toggle menu (drawer + backdrop together)
-  hamburger.addEventListener("click", () => {
-    sideMenu.classList.toggle("visible");
-    menuOverlay.classList.toggle("visible");
-  });
+  if (hamburger) {
+    hamburger.addEventListener("click", () => {
+      sideMenu.classList.toggle("visible");
+      menuOverlay.classList.toggle("visible");
+    });
+  }
 
   // Tapping the backdrop closes the drawer, same as native nav drawers
-  menuOverlay.addEventListener("click", () => {
-    sideMenu.classList.remove("visible");
-    menuOverlay.classList.remove("visible");
-  });
+  if (menuOverlay) {
+    menuOverlay.addEventListener("click", () => {
+      sideMenu.classList.remove("visible");
+      menuOverlay.classList.remove("visible");
+    });
+  }
 
   // Build menu from data-title / data-icon attributes on each section
   sections.forEach(section => {
@@ -115,8 +119,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Show the section matching the URL hash (deep link), defaulting to Home.
   // Using replace (push:false) so the very first load doesn't add a history entry.
-  const startId = (location.hash || "#home").slice(1);
-  showSection(document.getElementById(startId) ? startId : "home", { push: false });
+  // Show the correct section on load. Wrapped in try-catch: if something
+  // goes wrong (e.g. an unexpected iOS PWA environment quirk), we still
+  // fall back to showing the home section so the user sees content.
+  try {
+    const startId = (location.hash || "#home").slice(1);
+    showSection(document.getElementById(startId) ? startId : "home", { push: false });
+  } catch (e) {
+    console.error("showSection on load failed:", e);
+    const home = document.getElementById("home");
+    if (home) home.style.display = "block";
+  }
 
   // Settings toggles and sliders
   const fontSlider = document.getElementById("font-size-slider");
